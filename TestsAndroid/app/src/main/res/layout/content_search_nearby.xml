@@ -12,13 +12,12 @@
     tools:context="com.example.betty.testsandroid.SearchNearbyActivity"
     tools:showIn="@layout/activity_search_nearby">
 
+
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/vue"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="false"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="false" />
+        android:layout_width="300dp"
+        android:layout_height="500dp"
+        android:id="@+id/text"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"/>
+
 </RelativeLayout>

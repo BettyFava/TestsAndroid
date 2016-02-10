@@ -14,12 +14,19 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.okhttp.OkHttpClient;
 
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+
+import retrofit.RestAdapter;
+import retrofit.client.OkClient;
 
 public class SearchNearbyActivity extends AppCompatActivity implements LocationListener {
 
@@ -36,14 +43,13 @@ public class SearchNearbyActivity extends AppCompatActivity implements LocationL
         setContentView(R.layout.activity_search_nearby);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        Button currentButton = (Button) findViewById(R.id.currentButton);
+        currentButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-
+            public void onClick(View v) {
+                onResume();
             }
-        });
+            });
     }
 
     @Override
@@ -53,9 +59,10 @@ public class SearchNearbyActivity extends AppCompatActivity implements LocationL
         if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER))
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 0, this);
-            callAPI(lm);
+
         }
         lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000, 0, this);
+        callAPI(lm);
     }
 
     @Override
@@ -115,33 +122,21 @@ public class SearchNearbyActivity extends AppCompatActivity implements LocationL
     private void callAPI (LocationManager lm) throws SecurityException {
         Double lat = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER).getLatitude();
         Double longitude = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER).getLongitude();
-        String url = "http://services.gisgraphy.com/geoloc/search?lat=" + lat+ "&lng=" + longitude + "&radius=7000&placetype=city&format=JSON&distance=true";
+        final String API_BASE_URL  = "http://services.gisgraphy.com/geoloc/search?lat=" + lat+ "&lng=" + longitude + "&radius=7000&placetype=city&format=JSON&distance=true";
         String urlString = "";
         try {
-            urlString = URLEncoder.encode(url, "UTF-8");
+            urlString = URLEncoder.encode(API_BASE_URL, "UTF-8");
         } catch (UnsupportedEncodingException e) {
 
             // if this fails for some reason, let the user know why
             Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
+        RestAdapter.Builder builder = new RestAdapter.Builder()
+                .setEndpoint(API_BASE_URL)
+                .setClient(new OkClient(new OkHttpClient()));
 
-        // Create a client to perform networking
-        AsyncHttpClient client = new AsyncHttpClient();
-
-        // Have the client get a JSONArray of data
-        // and define how to respond
-        client.get(QUERY_URL + urlString,
-                new JsonHttpResponseHandler() {
-
-                    @Override
-                    public void onSuccess(JSONObject jsonObject) {}
-
-                    @Override
-                    public void onFailure(int statusCode, Throwable throwable, JSONObject error) {}
-                });
+        TextView textElement = (TextView) findViewById(R.id.text);
+        textElement.setText(builder.toString());
     }
-    }
-
-
-    }
+}
 
