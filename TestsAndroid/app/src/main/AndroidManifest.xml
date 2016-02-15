@@ -21,12 +21,6 @@
             android:value="AIzaSyDd5Ms6hRfVAxcTeXLbEmsx23XgAtsaEd4" />
 
         <activity
-            android:name=".MainActivity"
-            android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".GoogleAPI">
-        </activity>
-        <activity
             android:name=".SearchNearbyActivity"
             android:label="@string/title_activity_search_nearby"
             android:theme="@style/AppTheme.NoActionBar">
