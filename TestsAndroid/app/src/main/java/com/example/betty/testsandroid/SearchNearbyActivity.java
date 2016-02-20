@@ -10,41 +10,32 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.betty.testsandroid.Objects.City;
+import com.example.betty.testsandroid.object.City;
 import com.example.betty.testsandroid.Service.GisgraphyService;
 import com.example.betty.testsandroid.itf.CitiesSearch;
-import com.squareup.okhttp.OkHttpClient;
+import com.example.betty.testsandroid.object.DataSearch;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
 
-import retrofit.RestAdapter;
 import retrofit.RetrofitError;
-import retrofit.client.OkClient;
 import retrofit.client.Response;
 
 public class SearchNearbyActivity extends AppCompatActivity implements LocationListener {
@@ -118,6 +109,7 @@ public class SearchNearbyActivity extends AppCompatActivity implements LocationL
         b1 = (ImageButton) findViewById(R.id.buttonSearchGeo);
         city = GisgraphyService.createService(CitiesSearch.class);
 
+
         if (info == null || b1 == null) {
             throw new NullPointerException("Widget not found in view !");
         }
@@ -167,12 +159,15 @@ public class SearchNearbyActivity extends AppCompatActivity implements LocationL
 
 
         try {
-            retrofit.Callback<City> c = new retrofit.Callback<City>() {
+            retrofit.Callback<JsonElement> c = new retrofit.Callback<JsonElement>() {
 
                 @Override
-                public void success(City s, Response response) {
-                    Log.d("SUCESS1", s.toString());
-                    info.setText(s.toString());
+                public void success(JsonElement s, Response response) {
+                    Gson gson = new Gson();
+                    DataSearch data = gson.fromJson(s, new TypeToken<DataSearch>() {}.getType());
+                    Log.d("SUCESS1", data.toString());
+                    info.setText(data.getCities().toString());
+
                 }
 
                 @Override

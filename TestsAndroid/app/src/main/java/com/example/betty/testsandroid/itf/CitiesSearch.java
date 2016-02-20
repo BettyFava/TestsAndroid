@@ -1,9 +1,12 @@
 package com.example.betty.testsandroid.itf;
 
-import com.example.betty.testsandroid.Objects.City;
+import com.example.betty.testsandroid.object.City;
+import com.google.gson.JsonElement;
 
+import java.util.List;
 import java.util.Map;
 
+import retrofit.Callback;
 import retrofit.http.GET;
 import retrofit.http.QueryMap;
 
@@ -12,5 +15,5 @@ import retrofit.http.QueryMap;
  */
 public interface CitiesSearch {
     @GET("/find")
-    void cities(@QueryMap Map<String, String> c, retrofit.Callback<City> callback);
+    void cities(@QueryMap Map<String, String> c, Callback<JsonElement> callback);
 }
