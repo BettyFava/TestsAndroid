@@ -2,6 +2,7 @@ package com.example.betty.testsandroid.object;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,18 +11,18 @@ import java.util.List;
 public class DataSearch {
 
     @SerializedName("list")
-    private List<City> cities;
+    private ArrayList<City> cities;
 
 
-    public DataSearch(List<City> cities) {
+    public DataSearch( ArrayList<City> cities) {
         this.cities = cities;
     }
 
-    public List<City> getCities() {
+    public  ArrayList<City> getCities() {
         return cities;
     }
 
-    public void setCities(List<City> cities) {
+    public void setCities( ArrayList<City> cities) {
         this.cities = cities;
     }
 
