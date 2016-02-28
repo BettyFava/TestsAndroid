@@ -23,6 +23,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.annimon.stream.Collectors;
+import com.annimon.stream.Stream;
 import com.example.betty.testsandroid.object.City;
 import com.example.betty.testsandroid.service.LocationService;
 import com.example.betty.testsandroid.itf.CitiesSearch;
@@ -38,6 +40,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import retrofit.RetrofitError;
@@ -132,11 +135,14 @@ public class SearchNearbyActivity extends Activity implements GoogleApiClient.Co
                     @Override
                     public void success(JsonElement s, Response response) {
                         Gson gson = new Gson();
-                        DataSearch data = gson.fromJson(s, new TypeToken<DataSearch>() {}.getType());
+                        DataSearch data = gson.fromJson(s, new TypeToken<DataSearch>() {
+                        }.getType());
                         Log.d("SUCESS1", data.toString());
-                        ArrayList<City> arrayList = data.getCities();
-                        ArrayAdapter<City> adapter = new ArrayAdapter<City>(context,
-                        android.R.layout.simple_list_item_1, arrayList );
+                        List<City> list = data.getCities();
+                        List<String> cities = Stream.of(list).map(c->c.getName()).distinct().collect(Collectors.toList());
+                        Log.d("test", cities.toString());
+                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
+                        android.R.layout.simple_list_item_1, cities );
                         mListView.setAdapter(adapter);
 
                     }
