@@ -141,8 +141,8 @@ public class SearchNearbyActivity extends Activity implements GoogleApiClient.Co
                         List<City> list = data.getCities();
                         List<String> cities = Stream.of(list).map(c->c.getName()).distinct().collect(Collectors.toList());
                         Log.d("test", cities.toString());
-                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
-                        android.R.layout.simple_list_item_1, cities );
+                        ArrayAdapter<City> adapter = new ArrayAdapter<City>(context,
+                        android.R.layout.simple_list_item_1, list );
                         mListView.setAdapter(adapter);
 
                     }

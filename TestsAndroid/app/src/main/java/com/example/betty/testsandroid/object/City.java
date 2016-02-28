@@ -8,6 +8,13 @@ public class City {
     @SerializedName("name")
     public String name;
 
+    @SerializedName("id")
+    public String id;
+
+    public City(String name, String id) {
+        this.name = name;
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -17,10 +24,19 @@ public class City {
         this.name = name;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return "City{" +
                 "name='" + name + '\'' +
+                ", id='" + id + '\'' +
                 '}';
     }
 }
