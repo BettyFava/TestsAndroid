@@ -6,6 +6,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -29,15 +31,21 @@ import com.example.betty.testsandroid.object.City;
 import com.example.betty.testsandroid.service.LocationService;
 import com.example.betty.testsandroid.itf.CitiesSearch;
 import com.example.betty.testsandroid.object.DataSearch;
+import com.example.betty.testsandroid.tools.GeoAdapter;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONObject;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -97,7 +105,7 @@ public class SearchNearbyActivity extends Activity implements GoogleApiClient.Co
 
     View.OnClickListener searchHandler = new View.OnClickListener() {
         public void onClick(View v) {
-//            displayLocation();
+           displayLocation();
         }
     };
 
@@ -105,7 +113,6 @@ public class SearchNearbyActivity extends Activity implements GoogleApiClient.Co
      * Method to display the location on UI
      * */
     private void displayLocation() {
-
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -139,11 +146,10 @@ public class SearchNearbyActivity extends Activity implements GoogleApiClient.Co
                         DataSearch data = gson.fromJson(s, new TypeToken<DataSearch>() {
                         }.getType());
                         Log.d("SUCESS1", data.toString());
-                        List<City> list = data.getCities();
+                        ArrayList<City> list = data.getCities();
                         List<String> cities = Stream.of(list).map(c->c.getName()).distinct().collect(Collectors.toList());
                         Log.d("test", cities.toString());
-                        ArrayAdapter<City> adapter = new ArrayAdapter<City>(context,
-                        android.R.layout.simple_list_item_1, list );
+                        GeoAdapter adapter = new GeoAdapter(context, list ) ;
                         mListView.setAdapter(adapter);
 
                     }
@@ -174,6 +180,7 @@ public class SearchNearbyActivity extends Activity implements GoogleApiClient.Co
             lblLocation
                     .setText("Il est impossible de vous localiser.");
         }
+
     }
 
     /**
@@ -235,7 +242,7 @@ public class SearchNearbyActivity extends Activity implements GoogleApiClient.Co
     public void onConnected(Bundle arg0) {
 
         // Once connected with google api, get the location
-        displayLocation();
+//        displayLocation();
     }
 
     @Override

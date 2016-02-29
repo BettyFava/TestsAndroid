@@ -24,11 +24,9 @@
         android:paddingTop="@dimen/normal_padding"
         android:textSize="@dimen/normal_text_size"/>
 
-
     <ListView
         android:id="@+id/listView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
 
 </LinearLayout>
