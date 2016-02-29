@@ -91,14 +91,15 @@ public class SearchNearbyActivity extends Activity implements GoogleApiClient.Co
             // Building the GoogleApi client
             buildGoogleApiClient();
         }
-
+        btnSearchLocation.setOnClickListener(searchHandler);
         // Show location button click listener
-        View.OnClickListener searchHandler = new View.OnClickListener() {
-            public void onClick(View v) {
-                displayLocation();
-            }
-        };
     }
+
+    View.OnClickListener searchHandler = new View.OnClickListener() {
+        public void onClick(View v) {
+//            displayLocation();
+        }
+    };
 
     /**
      * Method to display the location on UI
