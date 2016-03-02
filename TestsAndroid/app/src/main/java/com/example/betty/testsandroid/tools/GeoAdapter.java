@@ -23,7 +23,7 @@ public class GeoAdapter extends ArrayAdapter<City> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // Get the data item for this position
+        // Get the item data for this position
         City city = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {

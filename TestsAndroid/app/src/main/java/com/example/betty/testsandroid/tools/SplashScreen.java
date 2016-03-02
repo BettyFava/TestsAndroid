@@ -13,7 +13,7 @@ import android.os.Handler;
 
 import com.example.betty.testsandroid.R;
 import com.example.betty.testsandroid.SearchNearbyActivity;
-
+import com.example.betty.testsandroid.ShakeActivity;
 
 
 public class SplashScreen extends Activity {
@@ -37,7 +37,7 @@ public class SplashScreen extends Activity {
             public void run() {
                 // This method will be executed once the timer is over
                 // Start your app main activity
-                Intent i = new Intent(SplashScreen.this, SearchNearbyActivity.class);
+                Intent i = new Intent(SplashScreen.this, ShakeActivity.class);
                 startActivity(i);
 
                 // close this activity
