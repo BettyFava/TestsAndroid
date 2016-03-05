@@ -116,9 +116,16 @@ public class SlideMenuActivity extends AppCompatActivity {
         // Drawer Item click listeners
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-
+        public Fragment fragment;
             private void selectItemFromDrawer(int position) {
-                Fragment fragment = new MapsFragment();
+                Log.d("Test", String.valueOf(position));
+                if (position == 0){
+                fragment = new MapsFragment();}
+                else if (position == 1){
+                    fragment = new ContactFragment();}
+                else {fragment=new MapsFragment();}
+
+
 
                 FragmentManager fragmentManager = getFragmentManager();
                 fragmentManager.beginTransaction()
