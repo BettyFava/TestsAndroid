@@ -102,6 +102,7 @@ public class SlideMenuActivity extends AppCompatActivity {
         mNavItems.add(new NavItem("Accueil", "Retournez à l'accueil", R.drawable.ic_go_index));
         mNavItems.add(new NavItem("Favoris", "Mes villes préférées", R.drawable.ic_star_bis));
         mNavItems.add(new NavItem("Ma carte", "Se situer", R.drawable.ic_map));
+        mNavItems.add(new NavItem("A propos", "Qui sommes-nous ?", R.drawable.ic_us));
 
         // DrawerLayout
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
@@ -119,9 +120,11 @@ public class SlideMenuActivity extends AppCompatActivity {
         public Fragment fragment;
             private void selectItemFromDrawer(int position) {
                 Log.d("Test", String.valueOf(position));
-                if (position == 0){
+               if (position == 1){
+                    fragment = new SearchNearbyActivity();}
+                else if (position == 2){
                 fragment = new MapsFragment();}
-                else if (position == 1){
+                else if (position == 3){
                     fragment = new ContactFragment();}
                 else {fragment=new MapsFragment();}
 

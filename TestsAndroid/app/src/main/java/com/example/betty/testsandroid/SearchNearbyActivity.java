@@ -3,6 +3,7 @@ package com.example.betty.testsandroid;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
@@ -17,8 +18,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -54,14 +57,13 @@ import java.util.Map;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class SearchNearbyActivity extends Activity implements GoogleApiClient.ConnectionCallbacks,
+public class SearchNearbyActivity extends Fragment implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
     // LogCat tag
     private static final String TAG = SearchNearbyActivity.class.getSimpleName();
     private CitiesSearch city = null;
     private Map<String, String> parameters = null;
     private static final int PERMISSION_REQUEST_CODE = 100;
-    private final Context context = this;
     private Integer number = 15;
 
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 1000;
@@ -81,15 +83,15 @@ public class SearchNearbyActivity extends Activity implements GoogleApiClient.Co
     private ListView mListView;
 
 
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_nearby);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View v = inflater.inflate(R.layout.fragment_test, container, false);
 
-        lblLocation = (TextView) findViewById(R.id.info);
-        btnSearchLocation = (ImageButton) findViewById(R.id.buttonSearchGeo);
-        mListView = (ListView) findViewById(R.id.listView);
+        lblLocation = (TextView) v.findViewById(R.id.info);
+        btnSearchLocation = (ImageButton) v.findViewById(R.id.buttonSearchGeo);
+        mListView = (ListView) v.findViewById(R.id.listView);
         city = LocationService.createService(CitiesSearch.class);
 
 
@@ -101,19 +103,20 @@ public class SearchNearbyActivity extends Activity implements GoogleApiClient.Co
         }
         btnSearchLocation.setOnClickListener(searchHandler);
         // Show location button click listener
+
+        return v;
     }
 
     View.OnClickListener searchHandler = new View.OnClickListener() {
         public void onClick(View v) {
-           displayLocation();
+            displayLocation();
         }
     };
-
     /**
      * Method to display the location on UI
      * */
     private void displayLocation() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -149,7 +152,7 @@ public class SearchNearbyActivity extends Activity implements GoogleApiClient.Co
                         ArrayList<City> list = data.getCities();
                         List<String> cities = Stream.of(list).map(c->c.getName()).distinct().collect(Collectors.toList());
                         Log.d("test", cities.toString());
-                        GeoAdapter adapter = new GeoAdapter(context, list ) ;
+                        GeoAdapter adapter = new GeoAdapter(getContext(), list ) ;
                         mListView.setAdapter(adapter);
 
                     }
@@ -157,7 +160,7 @@ public class SearchNearbyActivity extends Activity implements GoogleApiClient.Co
                     @Override
                     public void failure(RetrofitError error) {
                         Log.d("DEBUG1", error.getUrl());
-                        AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
                         alert.setTitle(error.getMessage())
                                 .setMessage("Failed to " + error.getUrl())
                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
@@ -172,7 +175,7 @@ public class SearchNearbyActivity extends Activity implements GoogleApiClient.Co
                 };
                 city.cities(parameters, c);
             } catch (Exception e) {
-                Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
             }
 
         } else {
@@ -187,7 +190,7 @@ public class SearchNearbyActivity extends Activity implements GoogleApiClient.Co
      * Creating google api client object
      * */
     protected synchronized void buildGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
+        mGoogleApiClient = new GoogleApiClient.Builder(getContext())
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API).build();
@@ -198,16 +201,15 @@ public class SearchNearbyActivity extends Activity implements GoogleApiClient.Co
      * */
     private boolean checkPlayServices() {
         int resultCode = GooglePlayServicesUtil
-                .isGooglePlayServicesAvailable(this);
+                .isGooglePlayServicesAvailable(getContext());
         if (resultCode != ConnectionResult.SUCCESS) {
             if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
-                GooglePlayServicesUtil.getErrorDialog(resultCode, this,
+                GooglePlayServicesUtil.getErrorDialog(resultCode,getActivity() ,
                         PLAY_SERVICES_RESOLUTION_REQUEST).show();
             } else {
-                Toast.makeText(getApplicationContext(),
+                Toast.makeText(getActivity(),
                         "This device is not supported.", Toast.LENGTH_LONG)
                         .show();
-                finish();
             }
             return false;
         }
@@ -215,7 +217,7 @@ public class SearchNearbyActivity extends Activity implements GoogleApiClient.Co
     }
 
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
         if (mGoogleApiClient != null) {
             mGoogleApiClient.connect();
@@ -223,7 +225,7 @@ public class SearchNearbyActivity extends Activity implements GoogleApiClient.Co
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
 
         checkPlayServices();
