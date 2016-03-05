@@ -87,7 +87,7 @@ public class SearchNearbyActivity extends Fragment implements GoogleApiClient.Co
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_test, container, false);
+        View v = inflater.inflate(R.layout.activity_search_nearby, container, false);
 
         lblLocation = (TextView) v.findViewById(R.id.info);
         btnSearchLocation = (ImageButton) v.findViewById(R.id.buttonSearchGeo);
@@ -101,22 +101,23 @@ public class SearchNearbyActivity extends Fragment implements GoogleApiClient.Co
             // Building the GoogleApi client
             buildGoogleApiClient();
         }
-        btnSearchLocation.setOnClickListener(searchHandler);
-        // Show location button click listener
+        btnSearchLocation.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                displayLocation();
+            }
+        });
 
         return v;
     }
 
-    View.OnClickListener searchHandler = new View.OnClickListener() {
-        public void onClick(View v) {
-            displayLocation();
-        }
-    };
+
     /**
      * Method to display the location on UI
      * */
     private void displayLocation() {
-        if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -152,7 +153,7 @@ public class SearchNearbyActivity extends Fragment implements GoogleApiClient.Co
                         ArrayList<City> list = data.getCities();
                         List<String> cities = Stream.of(list).map(c->c.getName()).distinct().collect(Collectors.toList());
                         Log.d("test", cities.toString());
-                        GeoAdapter adapter = new GeoAdapter(getContext(), list ) ;
+                        GeoAdapter adapter = new GeoAdapter(getActivity(), list ) ;
                         mListView.setAdapter(adapter);
 
                     }
@@ -160,7 +161,7 @@ public class SearchNearbyActivity extends Fragment implements GoogleApiClient.Co
                     @Override
                     public void failure(RetrofitError error) {
                         Log.d("DEBUG1", error.getUrl());
-                        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
                         alert.setTitle(error.getMessage())
                                 .setMessage("Failed to " + error.getUrl())
                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
@@ -175,7 +176,7 @@ public class SearchNearbyActivity extends Fragment implements GoogleApiClient.Co
                 };
                 city.cities(parameters, c);
             } catch (Exception e) {
-                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
             }
 
         } else {
@@ -190,7 +191,7 @@ public class SearchNearbyActivity extends Fragment implements GoogleApiClient.Co
      * Creating google api client object
      * */
     protected synchronized void buildGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(getContext())
+        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API).build();
@@ -201,7 +202,7 @@ public class SearchNearbyActivity extends Fragment implements GoogleApiClient.Co
      * */
     private boolean checkPlayServices() {
         int resultCode = GooglePlayServicesUtil
-                .isGooglePlayServicesAvailable(getContext());
+                .isGooglePlayServicesAvailable(getActivity());
         if (resultCode != ConnectionResult.SUCCESS) {
             if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
                 GooglePlayServicesUtil.getErrorDialog(resultCode,getActivity() ,
