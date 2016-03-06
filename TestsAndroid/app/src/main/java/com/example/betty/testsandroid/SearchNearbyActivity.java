@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.MatrixCursor;
@@ -22,7 +23,9 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -58,7 +61,7 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class SearchNearbyActivity extends Fragment implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+        GoogleApiClient.OnConnectionFailedListener  {
     // LogCat tag
     private static final String TAG = SearchNearbyActivity.class.getSimpleName();
     private CitiesSearch city = null;
@@ -147,14 +150,27 @@ public class SearchNearbyActivity extends Fragment implements GoogleApiClient.Co
                     @Override
                     public void success(JsonElement s, Response response) {
                         Gson gson = new Gson();
-                        DataSearch data = gson.fromJson(s, new TypeToken<DataSearch>() {
-                        }.getType());
+                        DataSearch data = gson.fromJson(s, DataSearch.class);
                         Log.d("SUCESS1", data.toString());
                         ArrayList<City> list = data.getCities();
                         List<String> cities = Stream.of(list).map(c->c.getName()).distinct().collect(Collectors.toList());
                         Log.d("test", cities.toString());
                         GeoAdapter adapter = new GeoAdapter(getActivity(), list ) ;
+                        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view,
+                                                    int position, long id) {
+                                Toast.makeText(getActivity(),
+                                        "Click ListItem Number " , Toast.LENGTH_LONG)
+                                        .show();  //this doesn't work too
+                                Intent intent = new Intent(getActivity(), InformationActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+
+                            }
+                        });
                         mListView.setAdapter(adapter);
+
 
                     }
 
@@ -252,5 +268,6 @@ public class SearchNearbyActivity extends Fragment implements GoogleApiClient.Co
     public void onConnectionSuspended(int arg0) {
         mGoogleApiClient.connect();
     }
+
 }
 
