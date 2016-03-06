@@ -8,16 +8,16 @@ import com.google.gson.annotations.SerializedName;
 public class Coord {
 
     @SerializedName("lon")
-    private Double lon;
+    private String lon;
     @SerializedName("lat")
-    private Double lat;
+    private String lat;
 
     /**
      *
      * @return
      * The lon
      */
-    public Double getLon() {
+    public String getLon() {
         return lon;
     }
 
@@ -26,7 +26,7 @@ public class Coord {
      * @param lon
      * The lon
      */
-    public void setLon(Double lon) {
+    public void setLon(String lon) {
         this.lon = lon;
     }
 
@@ -35,7 +35,7 @@ public class Coord {
      * @return
      * The lat
      */
-    public Double getLat() {
+    public String  getLat() {
         return lat;
     }
 
@@ -44,7 +44,7 @@ public class Coord {
      * @param lat
      * The lat
      */
-    public void setLat(Double lat) {
+    public void setLat(String lat) {
         this.lat = lat;
     }
 }

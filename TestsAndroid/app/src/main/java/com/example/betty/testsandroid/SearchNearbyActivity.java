@@ -153,8 +153,6 @@ public class SearchNearbyActivity extends Fragment implements GoogleApiClient.Co
                         DataSearch data = gson.fromJson(s, DataSearch.class);
                         Log.d("SUCESS1", data.toString());
                         ArrayList<City> list = data.getCities();
-                        List<String> cities = Stream.of(list).map(c->c.getName()).distinct().collect(Collectors.toList());
-                        Log.d("test", cities.toString());
                         GeoAdapter adapter = new GeoAdapter(getActivity(), list ) ;
                         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override

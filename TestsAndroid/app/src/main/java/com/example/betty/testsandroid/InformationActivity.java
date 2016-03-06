@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.annimon.stream.Collectors;
@@ -35,14 +36,23 @@ public class InformationActivity extends AppCompatActivity {
     private CityInformation city = null;
     private Map<String, String> parameters = null;
     private final Context context = this;
-    Intent intent = getIntent();
-    Bundle bundle = intent.getExtras();
-    String idCity = bundle.getString("city");
+    private TextView lblCityName;
+    private TextView lblWeather;
+    private TextView lblWind;
+    private TextView lblTemp;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_information);
+        lblCityName = (TextView)findViewById(R.id.city_name);
+        lblWeather = (TextView)findViewById(R.id.city_weather);
+        lblWind = (TextView)findViewById(R.id.city_wind);
+        lblTemp = (TextView)findViewById(R.id.city_temp);
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        String idCity = bundle.getString("idCity");
         parameters = new LinkedHashMap<String, String>();
         parameters.put("id", idCity);
         parameters.put("lang", "fr");
@@ -57,6 +67,11 @@ public class InformationActivity extends AppCompatActivity {
                 @Override
                 public void success(City s, Response response) {
                     Log.d("TestInformations", s.toString());
+                    lblCityName.setText(s.getName());
+                    lblWeather.setText(s.getWeather().toString());
+                    lblWind.setText(s.getWind().getSpeed());
+                    lblTemp.setText(s.getMain().getTemp());
+
 
 
 

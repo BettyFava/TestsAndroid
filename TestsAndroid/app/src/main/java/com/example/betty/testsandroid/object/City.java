@@ -2,6 +2,8 @@ package com.example.betty.testsandroid.object;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -9,17 +11,24 @@ import java.util.Date;
  */
 public class City {
 
-
     public String name;
 
     @SerializedName("id")
     public String id;
 
-
     @SerializedName("coord")
     public Coord coord;
 
-  /*  public Main main;*/
+    @SerializedName("main")
+    public Main main;
+
+    @SerializedName("weather")
+    public ArrayList weather;
+
+    @SerializedName("wind")
+    public Wind wind;
+
+    public Date update;
 
     public City() {
     }
@@ -27,40 +36,53 @@ public class City {
     public String getName() {
         return name;
     }
- /*   public Main getMain() {
-        return main;
-    }
-
-    public void setMain(Main main) {
-        this.main = main;
-    }*/
 
     public void setName(String name) {
         this.name = name;
     }
 
-/*    public Weather getWeather() {
+    public Main getMain() {
+        return main;
+    }
+
+    public void setMain(Main main) {
+        this.main = main;
+    }
+
+    public ArrayList getWeather() {
         return weather;
     }
 
-    public void setWeather(Weather weather) {
-        this.weather = weather;
-    }*/
+    public void setWeather(ArrayList weather) {
+        weather = weather;
+    }
 
     public String getId() {
+
         return id;
     }
 
     public void setId(String id) {
+
         this.id = id;
     }
 
     public Coord getCoord() {
+
         return coord;
     }
 
     public void setCoord(Coord coord) {
+
         this.coord = coord;
+    }
+
+    public Wind getWind() {
+        return wind;
+    }
+
+    public void setWind(Wind wind) {
+        this.wind = wind;
     }
 
     @Override
@@ -68,8 +90,10 @@ public class City {
         return "City{" +
                 "name='" + name + '\'' +
                 ", id='" + id + '\'' +
-/*                ", weather=" + weather +*/
+                ", weather=" + weather +
+                ", main=" + main +
                 ", coord=" + coord +
+                ", wind=" + wind +
                 '}';
     }
 }

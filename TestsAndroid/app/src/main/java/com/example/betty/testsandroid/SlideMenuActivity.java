@@ -120,8 +120,10 @@ public class SlideMenuActivity extends AppCompatActivity {
         public Fragment fragment;
             private void selectItemFromDrawer(int position) {
                 Log.d("Test", String.valueOf(position));
-               if (position == 1){
+                if (position == 0){
                     fragment = new SearchNearbyActivity();}
+                else if (position == 1){
+                    fragment = new MapsFragment();}
                 else if (position == 2){
                 fragment = new MapsFragment();}
                 else if (position == 3){

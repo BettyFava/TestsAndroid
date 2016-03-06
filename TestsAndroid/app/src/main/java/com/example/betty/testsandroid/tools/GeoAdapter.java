@@ -50,7 +50,7 @@ public class GeoAdapter extends ArrayAdapter<City> {
                 Intent intent = new Intent(parent.getContext(), InformationActivity.class);
 
                 //On affecte à l'Intent le Bundle que l'on a créé
-                intent.putExtra("city", city.toString());
+                intent.putExtra("idCity", city.getId());
                 parent.getContext().startActivity(intent);
             }
         });
