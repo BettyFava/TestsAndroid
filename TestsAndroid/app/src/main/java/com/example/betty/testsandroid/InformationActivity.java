@@ -18,10 +18,14 @@ import com.example.betty.testsandroid.itf.CitiesSearch;
 import com.example.betty.testsandroid.itf.CityInformation;
 import com.example.betty.testsandroid.object.City;
 import com.example.betty.testsandroid.object.DataSearch;
+import com.example.betty.testsandroid.object.Weather;
 import com.example.betty.testsandroid.service.LocationService;
 import com.example.betty.testsandroid.tools.GeoAdapter;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -31,7 +35,7 @@ import java.util.Map;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class InformationActivity extends AppCompatActivity {
+public class InformationActivity extends Main2Activity{
 
     private CityInformation city = null;
     private Map<String, String> parameters = null;
@@ -45,11 +49,17 @@ public class InformationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_information);
-        lblCityName = (TextView)findViewById(R.id.city_name);
-        lblWeather = (TextView)findViewById(R.id.city_weather);
-        lblWind = (TextView)findViewById(R.id.city_wind);
-        lblTemp = (TextView)findViewById(R.id.city_temp);
+
+        onCreateView();
+    }
+
+    protected void onCreateView() {
+        View menuView = this.getLayoutInflater().inflate(R.layout.activity_slide_menu, null);
+        View contentView = this.getLayoutInflater().inflate(R.layout.activity_information, null);
+        lblCityName = (TextView) contentView.findViewById(R.id.city_name);
+        lblWeather = (TextView) contentView.findViewById(R.id.city_weather);
+        lblWind = (TextView) contentView.findViewById(R.id.city_wind);
+        lblTemp = (TextView) contentView.findViewById(R.id.city_temp);
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         String idCity = bundle.getString("idCity");
@@ -68,11 +78,9 @@ public class InformationActivity extends AppCompatActivity {
                 public void success(City s, Response response) {
                     Log.d("TestInformations", s.toString());
                     lblCityName.setText(s.getName());
-                    lblWeather.setText(s.getWeather().toString());
+                    lblWeather.setText(s.getWeather().get(0).getDescription().toString().toUpperCase());
                     lblWind.setText(s.getWind().getSpeed());
                     lblTemp.setText(s.getMain().getTemp());
-
-
 
 
                 }
@@ -99,3 +107,4 @@ public class InformationActivity extends AppCompatActivity {
         }
     }
 }
+

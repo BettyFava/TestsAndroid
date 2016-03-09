@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -97,7 +98,6 @@ public class SlideMenuActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_slide_menu);
 
         mNavItems.add(new NavItem("Accueil", "Retournez à l'accueil", R.drawable.ic_go_index));
         mNavItems.add(new NavItem("Favoris", "Mes villes préférées", R.drawable.ic_star_bis));
@@ -152,6 +152,16 @@ public class SlideMenuActivity extends AppCompatActivity {
 
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
+    }
+
+    @Override
+    public void setContentView(int layoutResID)
+    {
+        DrawerLayout fullView = (DrawerLayout) getLayoutInflater().inflate(R.layout.activity_information, null);
+        FrameLayout activityContainer = (FrameLayout) fullView.findViewById(R.id.activity_content);
+        getLayoutInflater().inflate(layoutResID, activityContainer, true);
+        super.setContentView(fullView);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
     }
 
 }

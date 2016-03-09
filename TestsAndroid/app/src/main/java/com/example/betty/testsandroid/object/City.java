@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Betty on 15/02/2016.
@@ -23,10 +24,22 @@ public class City {
     public Main main;
 
     @SerializedName("weather")
-    public ArrayList weather;
+    public List<Weather> weather;
 
     @SerializedName("wind")
     public Wind wind;
+
+    public City(String name) {
+        this.name = name;
+    }
+
+    public List<Weather> getWeather() {
+        return weather;
+    }
+
+    public void setWeather(List<Weather> weather) {
+        this.weather = weather;
+    }
 
     public Date update;
 
@@ -49,13 +62,14 @@ public class City {
         this.main = main;
     }
 
-    public ArrayList getWeather() {
-        return weather;
+    public Date getUpdate() {
+        return update;
     }
 
-    public void setWeather(ArrayList weather) {
-        weather = weather;
+    public void setUpdate(Date update) {
+        this.update = update;
     }
+
 
     public String getId() {
 
